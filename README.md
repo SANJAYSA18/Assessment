@@ -11,9 +11,7 @@ It provides a clean user interface to browse and view details of **Common Vulner
 - **Data Cleansing & De-duplication**: Ensures data quality by preventing duplicate records and standardizing data types upon ingestion.
 - **REST API**: Well-structured API built with Django REST Framework to serve the stored CVE data.
 - **Dynamic Frontend**: Interactive UI built with vanilla JavaScript that communicates with the internal REST API.
-- **Pagination**: Server-side pagination to handle large datasets efficiently.
 - **Sorting**: Server-side sorting for key columns like CVE ID and dates.
-- **Admin Interface**: Django admin panel to easily view and manage raw data.
 
 ---
 
@@ -73,4 +71,5 @@ Main Page: Navigate to http://127.0.0.1:8000/ — you'll be redirected to the CV
 
 View Details: Click on a row in the table to view details for that CVE.
 
+<img width="1920" height="1025" alt="image" src="https://github.com/user-attachments/assets/19a8bb17-15ca-4b4c-bc75-8ee3fae9d0c3" />
 
