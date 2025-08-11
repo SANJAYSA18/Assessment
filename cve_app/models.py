@@ -9,8 +9,7 @@ class CVE(models.Model):
     description = models.TextField()
     raw_data = models.JSONField()
 
-    # The default ordering is now handled in the API view
-    # to allow for more flexible sorting.
+
 
     def __str__(self):
         return self.cve_id
