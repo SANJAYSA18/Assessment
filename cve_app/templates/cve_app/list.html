@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVE List</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>CVE LIST</h1>
+        <h3 id="total-records">Total Records: 0</h3>
+
+        <div class="table-container">
+            <table id="cve-table">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-sort="cve_id">CVE ID</th>
+                        <th>IDENTIFIER</th>
+                        <th class="sortable" data-sort="published_date">PUBLISHED DATE</th>
+                        <th class="sortable" data-sort="last_modified_date">LAST MODIFIED DATE</th>
+                        <th class="sortable" data-sort="status">STATUS</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="pagination-controls">
+            <div>
+                <label for="results-per-page">Results per page:</label>
+                <select id="results-per-page">
+                    <option value="10">10</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+            <div id="pagination-nav">
+                <span id="page-info"></span>
+                <button id="prev-page" disabled>&laquo;</button>
+                <button id="next-page" disabled>&raquo;</button>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/list.js' %}"></script>
+</body>
+</html>
+

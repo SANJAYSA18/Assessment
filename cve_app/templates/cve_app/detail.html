@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVE Detail</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 id="cve-id-header">{{ cve_id }}</h1>
+        <a href="{% url 'cve_app:cve_list_page' %}" class="back-link">&larr; Back to List</a>
+
+        <div class="section">
+            <h2>Description</h2>
+            <p id="cve-description">Loading...</p>
+        </div>
+
+        <div id="metrics-section" class="section"></div>
+        <div id="cpe-section" class="section">
+            <h2>Affected Configurations (CPE)</h2>
+            <div class="table-container">
+                <table id="cpe-table">
+                    <thead>
+                        <tr>
+                            <th>Criteria</th>
+                            <th>Match Criteria ID</th>
+                            <th>Vulnerable</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        const CVE_ID = "{{ cve_id }}";
+    </script>
+    <script src="{% static 'js/detail.js' %}"></script>
+</body>
+</html>
