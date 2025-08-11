@@ -35,4 +35,48 @@ It provides a clean user interface to browse and view details of **Common Vulner
 ### 2. Clone the Repository
 ```bash
 git clone <your-repository-url>
-cd cve_project
+cd cve_project 
+```
+### 3. Install Dependencies
+```` bash
+pip install django djangorestframework requests
+````
+
+### 4. Set Up the Database
+bash
+Copy
+Edit
+python manage.py makemigrations
+python manage.py migrate
+5. Ingest CVE Data
+⚠️ This step will take time as it downloads all CVEs from the NVD.
+Requires stable internet connection — may be blocked by firewalls/proxies.
+
+bash
+Copy
+Edit
+python manage.py ingest_cves
+6. Create an Admin Superuser (Optional)
+bash
+Copy
+Edit
+python manage.py createsuperuser
+Follow the prompts to create your username and password.
+
+7. Run the Development Server
+bash
+Copy
+Edit
+python manage.py runserver
+The application will be available at:
+http://127.0.0.1:8000/
+
+Usage
+Main Page: Navigate to http://127.0.0.1:8000/ — you'll be redirected to the CVE list page.
+
+View Details: Click on a row in the table to view details for that CVE.
+
+Admin Panel: Go to http://127.0.0.1:8000/admin/ and log in with your superuser credentials to browse raw records.
+
+API Endpoints
+
