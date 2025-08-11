@@ -71,5 +71,9 @@ Main Page: Navigate to http://127.0.0.1:8000/ — you'll be redirected to the CV
 
 View Details: Click on a row in the table to view details for that CVE.
 
+
 <img width="1920" height="1025" alt="image" src="https://github.com/user-attachments/assets/19a8bb17-15ca-4b4c-bc75-8ee3fae9d0c3" />
+
+
+<img width="1920" height="1025" alt="image" src="https://github.com/user-attachments/assets/5e042ec6-c3b3-4911-83bf-712c28c9083a" />
 
