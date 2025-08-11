@@ -43,31 +43,28 @@ pip install django djangorestframework requests
 ````
 
 ### 4. Set Up the Database
-bash
-Copy
-Edit
+``` bash
 python manage.py makemigrations
 python manage.py migrate
-5. Ingest CVE Data
+```
+
+### 5. Ingest CVE Data
 ⚠️ This step will take time as it downloads all CVEs from the NVD.
 Requires stable internet connection — may be blocked by firewalls/proxies.
 
-bash
-Copy
-Edit
+``` bash
 python manage.py ingest_cves
-6. Create an Admin Superuser (Optional)
-bash
-Copy
-Edit
+``` 
+### 6. Create an Admin Superuser (Optional)
+``` bash
 python manage.py createsuperuser
+```
 Follow the prompts to create your username and password.
 
-7. Run the Development Server
-bash
-Copy
-Edit
+### 7. Run the Development Server
+``` bash
 python manage.py runserver
+```
 The application will be available at:
 http://127.0.0.1:8000/
 
@@ -76,7 +73,4 @@ Main Page: Navigate to http://127.0.0.1:8000/ — you'll be redirected to the CV
 
 View Details: Click on a row in the table to view details for that CVE.
 
-Admin Panel: Go to http://127.0.0.1:8000/admin/ and log in with your superuser credentials to browse raw records.
-
-API Endpoints
 
