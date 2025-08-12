@@ -65,14 +65,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleSort(e) {
         const newSort = e.target.dataset.sort;
 
-        // If clicking the same header, reverse the sort order
+        
         if (currentSort === newSort) {
             currentSort = `-${newSort}`;
         } else {
             currentSort = newSort;
         }
 
-        // Update visual indicators
+        
         sortableHeaders.forEach(th => {
             th.classList.remove('asc', 'desc');
             if (th.dataset.sort === newSort) {
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        fetchCves(1, resultsPerPage, currentSort); // Fetch sorted data from page 1
+        fetchCves(1, resultsPerPage, currentSort); 
     }
 
     resultsPerPageSelect.addEventListener('change', (e) => {
@@ -93,9 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sortableHeaders.forEach(th => th.addEventListener('click', handleSort));
 
-    // Initial load
+
     fetchCves(currentPage, resultsPerPage, currentSort);
-    // Set initial sort indicator
     document.querySelector('[data-sort="last_modified_date"]').classList.add('desc');
 });
 
