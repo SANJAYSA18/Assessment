@@ -21,11 +21,11 @@ class CVEListAPI(ListAPIView):
     queryset = CVE.objects.all()
     serializer_class = CVEListSerializer
     pagination_class = StandardResultsSetPagination
-    # Add OrderingFilter to enable sorting via query parameters
+    
     filter_backends = [OrderingFilter]
-    # Define the fields that can be used for sorting
+    
     ordering_fields = ['cve_id', 'published_date', 'last_modified_date', 'status']
-    # Set a default ordering
+    
     ordering = ['-last_modified_date']
 
 class CVEDetailAPI(RetrieveAPIView):
