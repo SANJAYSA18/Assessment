@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentPage = 1;
     let resultsPerPage = 10;
-    let currentSort = '-last_modified_date'; // Default sort
+    let currentSort = '-last_modified_date'; 
 
     async function fetchCves(page = 1, perPage = 10, ordering = '-last_modified_date') {
         const apiUrl = `/api/cves/?page=${page}&per_page=${perPage}&ordering=${ordering}`;
