@@ -1,4 +1,4 @@
-# cve_app/management/commands/ingest_cves.py
+# cve_app/management/commands/ingest_cves.py.
 import requests
 from django.core.management.base import BaseCommand
 from django.utils.dateparse import parse_datetime
