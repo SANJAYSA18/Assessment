@@ -5,6 +5,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import OrderingFilter
 from .models import CVE
 from .serializers import CVEListSerializer, CVEDetailSerializer
+from django.utils import timezone
+from datetime import timedelta
 
 def cve_list_view(request):
     return render(request, 'cve_app/list.html')
@@ -18,15 +20,49 @@ class StandardResultsSetPagination(PageNumberPagination):
     max_page_size = 100
 
 class CVEListAPI(ListAPIView):
-    queryset = CVE.objects.all()
     serializer_class = CVEListSerializer
     pagination_class = StandardResultsSetPagination
-    
     filter_backends = [OrderingFilter]
-    
     ordering_fields = ['cve_id', 'published_date', 'last_modified_date', 'status']
-    
     ordering = ['-last_modified_date']
+
+    def get_queryset(self):
+        """
+        Override to apply filters based on query parameters.
+        """
+        queryset = CVE.objects.all()
+        params = self.request.query_params
+
+        # Filter by CVE ID (partial match, case-insensitive)
+        cve_id = params.get('cve_id', None)
+        if cve_id:
+            queryset = queryset.filter(cve_id__icontains=cve_id)
+
+        # Filter by Year
+        year = params.get('year', None)
+        if year:
+            queryset = queryset.filter(published_date__year=year)
+
+        # Filter by Last Modified in N days
+        last_mod_days = params.get('lastModDays', None)
+        if last_mod_days and last_mod_days.isdigit():
+            days = int(last_mod_days)
+            since_date = timezone.now() - timedelta(days=days)
+            queryset = queryset.filter(last_modified_date__gte=since_date)
+
+        # Filter by CVSS V2 Score
+        # Note: Filtering on a JSONField can be slow on large datasets without DB indexing
+        score = params.get('score', None)
+        if score:
+            try:
+                # This queries the nested JSON data.
+                queryset = queryset.filter(raw_data__metrics__cvssMetricV2__0__cvssData__baseScore=float(score))
+            except (ValueError, TypeError):
+                # Ignore if score is not a valid float
+                pass
+
+        return queryset
+
 
 class CVEDetailAPI(RetrieveAPIView):
     queryset = CVE.objects.all()
