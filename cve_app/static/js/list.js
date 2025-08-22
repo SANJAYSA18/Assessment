@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // DOM Elements for table and pagination
     const tableBody = document.querySelector('#cve-table tbody');
     const totalRecordsElem = document.getElementById('total-records');
     const pageInfoElem = document.getElementById('page-info');
@@ -7,19 +8,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultsPerPageSelect = document.getElementById('results-per-page');
     const sortableHeaders = document.querySelectorAll('th.sortable');
 
+    // DOM Elements for filtering
+    const filterCveIdInput = document.getElementById('filter-cve-id');
+    const filterYearInput = document.getElementById('filter-year');
+    const filterScoreInput = document.getElementById('filter-score');
+    const filterDaysInput = document.getElementById('filter-days');
+    const filterBtn = document.getElementById('filter-btn');
+    const clearFiltersBtn = document.getElementById('clear-filters-btn');
+
+    // State variables
     let currentPage = 1;
     let resultsPerPage = 10;
-    let currentSort = '-last_modified_date'; 
+    let currentSort = '-last_modified_date';
+    let currentFilters = {};
 
-    async function fetchCves(page = 1, perPage = 10, ordering = '-last_modified_date') {
-        const apiUrl = `/api/cves/?page=${page}&per_page=${perPage}&ordering=${ordering}`;
+    async function fetchCves() {
+        // Build the query parameters
+        const params = new URLSearchParams({
+            page: currentPage,
+            per_page: resultsPerPage,
+            ordering: currentSort,
+        });
+
+        // Add filter values to the parameters if they exist
+        Object.keys(currentFilters).forEach(key => {
+            if (currentFilters[key]) {
+                params.append(key, currentFilters[key]);
+            }
+        });
+
+        const apiUrl = `/api/cves/?${params.toString()}`;
+
         try {
             const response = await fetch(apiUrl);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
 
             updateTable(data.results);
-            updatePagination(data.count, page, perPage, data.previous, data.next);
+            updatePagination(data.count, data.previous, data.next);
         } catch (error) {
             console.error('Failed to fetch CVEs:', error);
             tableBody.innerHTML = '<tr><td colspan="5">Failed to load data. Please try again later.</td></tr>';
@@ -32,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
             tableBody.innerHTML = '<tr><td colspan="5">No records found.</td></tr>';
             return;
         }
-
         cves.forEach(cve => {
             const row = document.createElement('tr');
             row.dataset.cveId = cve.cve_id;
@@ -50,51 +75,73 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function updatePagination(totalRecords, page, perPage, prevUrl, nextUrl) {
+    function updatePagination(totalRecords, prevUrl, nextUrl) {
         totalRecordsElem.textContent = `Total Records: ${totalRecords}`;
-        const totalPages = Math.ceil(totalRecords / perPage);
-        pageInfoElem.textContent = `Page ${page} of ${totalPages}`;
+        const totalPages = Math.ceil(totalRecords / resultsPerPage);
+        pageInfoElem.textContent = `Page ${currentPage} of ${totalPages}`;
 
         prevButton.disabled = !prevUrl;
         nextButton.disabled = !nextUrl;
-
-        prevButton.onclick = () => fetchCves(page - 1, perPage, currentSort);
-        nextButton.onclick = () => fetchCves(page + 1, perPage, currentSort);
     }
 
-    function handleSort(e) {
-        const newSort = e.target.dataset.sort;
+    function applyFilters() {
+        currentFilters = {
+            cve_id: filterCveIdInput.value,
+            year: filterYearInput.value,
+            score: filterScoreInput.value,
+            lastModDays: filterDaysInput.value,
+        };
+        currentPage = 1; // Reset to first page when filters change
+        fetchCves();
+    }
 
-        
-        if (currentSort === newSort) {
-            currentSort = `-${newSort}`;
-        } else {
-            currentSort = newSort;
+    function clearFilters() {
+        filterCveIdInput.value = '';
+        filterYearInput.value = '';
+        filterScoreInput.value = '';
+        filterDaysInput.value = '';
+        applyFilters(); // Re-fetch with empty filters
+    }
+
+    // --- Event Listeners ---
+    filterBtn.addEventListener('click', applyFilters);
+    clearFiltersBtn.addEventListener('click', clearFilters);
+
+    prevButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            fetchCves();
         }
+    });
 
-        
-        sortableHeaders.forEach(th => {
-            th.classList.remove('asc', 'desc');
-            if (th.dataset.sort === newSort) {
-                th.classList.add(currentSort.startsWith('-') ? 'desc' : 'asc');
-            } else if (th.dataset.sort === currentSort.substring(1)) {
-                 th.classList.add('desc');
-            }
-        });
-
-        fetchCves(1, resultsPerPage, currentSort); 
-    }
+    nextButton.addEventListener('click', () => {
+        currentPage++;
+        fetchCves();
+    });
 
     resultsPerPageSelect.addEventListener('change', (e) => {
         resultsPerPage = parseInt(e.target.value, 10);
         currentPage = 1;
-        fetchCves(currentPage, resultsPerPage, currentSort);
+        fetchCves();
     });
 
-    sortableHeaders.forEach(th => th.addEventListener('click', handleSort));
+    sortableHeaders.forEach(th => {
+        th.addEventListener('click', (e) => {
+            const newSort = e.target.dataset.sort;
+            if (currentSort === newSort) {
+                currentSort = `-${newSort}`;
+            } else {
+                currentSort = newSort;
+            }
+            sortableHeaders.forEach(header => header.classList.remove('asc', 'desc'));
+            e.target.classList.add(currentSort.startsWith('-') ? 'desc' : 'asc');
+            currentPage = 1;
+            fetchCves();
+        });
+    });
 
-
-    fetchCves(currentPage, resultsPerPage, currentSort);
+    // Initial load
+    fetchCves();
     document.querySelector('[data-sort="last_modified_date"]').classList.add('desc');
 });
 
