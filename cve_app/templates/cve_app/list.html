@@ -10,6 +10,16 @@
 <body>
     <div class="container">
         <h1>CVE LIST</h1>
+
+        <div class="filter-container">
+            <input type="text" id="filter-cve-id" placeholder="Filter by CVE ID...">
+            <input type="number" id="filter-year" placeholder="Year (e.g., 2023)">
+            <input type="number" id="filter-score" placeholder="CVSSv2 Score (e.g., 7.5)" step="0.1">
+            <input type="number" id="filter-days" placeholder="Last Modified Within (Days)">
+            <button id="filter-btn">Apply Filters</button>
+            <button id="clear-filters-btn">Clear</button>
+        </div>
+
         <h3 id="total-records">Total Records: 0</h3>
 
         <div class="table-container">
@@ -41,7 +51,6 @@
                 <button id="prev-page" disabled>&laquo;</button>
                 <button id="next-page" disabled>&raquo;</button>
             </div>
-            
         </div>
     </div>
     <script src="{% static 'js/list.js' %}"></script>
