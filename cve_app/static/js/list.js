@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements for table and pagination
+    
     const tableBody = document.querySelector('#cve-table tbody');
     const totalRecordsElem = document.getElementById('total-records');
     const pageInfoElem = document.getElementById('page-info');
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultsPerPageSelect = document.getElementById('results-per-page');
     const sortableHeaders = document.querySelectorAll('th.sortable');
 
-    // DOM Elements for filtering
+
     const filterCveIdInput = document.getElementById('filter-cve-id');
     const filterYearInput = document.getElementById('filter-year');
     const filterScoreInput = document.getElementById('filter-score');
@@ -16,14 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterBtn = document.getElementById('filter-btn');
     const clearFiltersBtn = document.getElementById('clear-filters-btn');
 
-    // State variables
+    
     let currentPage = 1;
     let resultsPerPage = 10;
     let currentSort = '-last_modified_date';
     let currentFilters = {};
 
     async function fetchCves() {
-        // Build the query parameters
+    
         const params = new URLSearchParams({
             page: currentPage,
             per_page: resultsPerPage,
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
             score: filterScoreInput.value,
             lastModDays: filterDaysInput.value,
         };
-        currentPage = 1; // Reset to first page when filters change
+        currentPage = 1; 
         fetchCves();
     }
 
@@ -100,10 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
         filterYearInput.value = '';
         filterScoreInput.value = '';
         filterDaysInput.value = '';
-        applyFilters(); // Re-fetch with empty filters
+        applyFilters(); 
     }
 
-    // --- Event Listeners ---
+    
     filterBtn.addEventListener('click', applyFilters);
     clearFiltersBtn.addEventListener('click', clearFilters);
 
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Initial load
+    
     fetchCves();
     document.querySelector('[data-sort="last_modified_date"]').classList.add('desc');
 });
